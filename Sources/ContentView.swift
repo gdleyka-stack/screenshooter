@@ -70,6 +70,7 @@ struct ContentView: View {
 
 struct SettingsView: View {
     @AppStorage("showFlashEffect") private var showFlashEffect = true
+    @AppStorage("playSoundEffect") private var playSoundEffect = true
     
     var body: some View {
         VStack(spacing: 12) {
@@ -82,7 +83,7 @@ struct SettingsView: View {
                     Text("Flash Effect")
                         .font(.system(size: 13, weight: .semibold, design: .rounded))
                         .foregroundColor(.white.opacity(0.9))
-                    Text("Flash the screen white when taking a screenshot")
+                    Text("Flash the selected area white on capture")
                         .font(.system(size: 10, design: .rounded))
                         .foregroundColor(.white.opacity(0.5))
                 }
@@ -90,6 +91,34 @@ struct SettingsView: View {
                 Spacer()
                 
                 Toggle("", isOn: $showFlashEffect)
+                    .toggleStyle(SwitchToggleStyle(tint: .blue))
+                    .labelsHidden()
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.white.opacity(0.04))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                    )
+            )
+            .padding(.horizontal, 20)
+            
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Sound Effect")
+                        .font(.system(size: 13, weight: .semibold, design: .rounded))
+                        .foregroundColor(.white.opacity(0.9))
+                    Text("Play a sound when taking a screenshot")
+                        .font(.system(size: 10, design: .rounded))
+                        .foregroundColor(.white.opacity(0.5))
+                }
+                
+                Spacer()
+                
+                Toggle("", isOn: $playSoundEffect)
                     .toggleStyle(SwitchToggleStyle(tint: .blue))
                     .labelsHidden()
             }

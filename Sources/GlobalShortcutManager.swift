@@ -431,13 +431,26 @@ class CursorToggleManager {
         
         let showFlash = UserDefaults.standard.object(forKey: "showFlashEffect") as? Bool ?? true
         if showFlash {
-            triggerFlash(on: screen)
+            triggerFlash(rect: rect, on: screen)
+        }
+        
+        let playSound = UserDefaults.standard.object(forKey: "playSoundEffect") as? Bool ?? true
+        if playSound {
+            NSSound(named: "Tink")?.play()
         }
     }
     
-    private func triggerFlash(on screen: NSScreen) {
+    private func triggerFlash(rect: NSRect, on screen: NSScreen) {
         DispatchQueue.main.async {
-            let flashWindow = FlashWindow(frame: screen.frame)
+            let screenFrame = screen.frame
+            let absoluteRect = NSRect(
+                x: screenFrame.origin.x + rect.origin.x,
+                y: screenFrame.origin.y + rect.origin.y,
+                width: rect.width,
+                height: rect.height
+            )
+            
+            let flashWindow = FlashWindow(frame: absoluteRect)
             flashWindow.alphaValue = 0.8
             flashWindow.makeKeyAndOrderFront(nil)
             
