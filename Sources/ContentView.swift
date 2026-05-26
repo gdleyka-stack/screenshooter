@@ -69,11 +69,41 @@ struct ContentView: View {
 }
 
 struct SettingsView: View {
+    @AppStorage("showFlashEffect") private var showFlashEffect = true
+    
     var body: some View {
-        VStack {
+        VStack(spacing: 12) {
             Spacer().frame(height: 20)
             
             KeyRecorderView()
+            
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Flash Effect")
+                        .font(.system(size: 13, weight: .semibold, design: .rounded))
+                        .foregroundColor(.white.opacity(0.9))
+                    Text("Flash the screen white when taking a screenshot")
+                        .font(.system(size: 10, design: .rounded))
+                        .foregroundColor(.white.opacity(0.5))
+                }
+                
+                Spacer()
+                
+                Toggle("", isOn: $showFlashEffect)
+                    .toggleStyle(SwitchToggleStyle(tint: .blue))
+                    .labelsHidden()
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.white.opacity(0.04))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                    )
+            )
+            .padding(.horizontal, 20)
             
             Spacer()
             

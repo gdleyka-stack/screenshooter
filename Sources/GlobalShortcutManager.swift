@@ -134,6 +134,22 @@ class OverlayWindow: NSWindow {
     }
 }
 
+class FlashWindow: NSWindow {
+    init(frame: NSRect) {
+        super.init(
+            contentRect: frame,
+            styleMask: [.borderless],
+            backing: .buffered,
+            defer: false
+        )
+        self.isOpaque = false
+        self.backgroundColor = NSColor.white
+        self.hasShadow = false
+        self.level = .screenSaver
+        self.ignoresMouseEvents = true
+    }
+}
+
 class ScreenshotStore: ObservableObject {
     static let shared = ScreenshotStore()
     
@@ -411,6 +427,27 @@ class CursorToggleManager {
             } catch {
                 print("Failed to save PNG: \(error)")
             }
+        }
+        
+        let showFlash = UserDefaults.standard.object(forKey: "showFlashEffect") as? Bool ?? true
+        if showFlash {
+            triggerFlash(on: screen)
+        }
+    }
+    
+    private func triggerFlash(on screen: NSScreen) {
+        DispatchQueue.main.async {
+            let flashWindow = FlashWindow(frame: screen.frame)
+            flashWindow.alphaValue = 0.8
+            flashWindow.makeKeyAndOrderFront(nil)
+            
+            NSAnimationContext.runAnimationGroup({ context in
+                context.duration = 0.15
+                context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+                flashWindow.animator().alphaValue = 0.0
+            }, completionHandler: {
+                flashWindow.orderOut(nil)
+            })
         }
     }
 }
