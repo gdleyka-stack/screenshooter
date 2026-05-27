@@ -13,6 +13,7 @@ $(APP_NAME): $(SWIFT_FILES) Info.plist
 	@mkdir -p $(RESOURCES_DIR)
 	$(SWIFTC) -o $(MAC_OS_DIR)/$(APP_NAME) $(SWIFT_FILES) -target arm64-apple-macosx11.0
 	@cp Info.plist $(APP_DIR)/Contents/Info.plist
+	@if [ -f AppIcon.icns ]; then cp AppIcon.icns $(RESOURCES_DIR)/AppIcon.icns; echo "Icon copied"; fi
 	@echo "Build complete: $(APP_DIR)"
 
 clean:
